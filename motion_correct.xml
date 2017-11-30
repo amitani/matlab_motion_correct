@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<motionCorrectionSetting>
+   <cvMotionCorrect>
+      <factor>2</factor>
+      <marginh>64</marginh>
+      <marginw>32</marginw>
+      <sigmaSmoothing>0</sigmaSmoothing>
+      <sigmaNormalization>0</sigmaNormalization>
+      <normalizationOffset>0</normalizationOffset>
+      <toEqualizeHistogram>0</toEqualizeHistogram>
+      <threshold>80</threshold>
+      <replacement>35</replacement>
+   </cvMotionCorrect>
+   <findTransform>
+      <r1>1</r1>
+      <r2>3</r2>
+      <offset>100</offset>
+      <factor>8</factor>
+      <depth>1</depth>
+      <step>30</step>
+      <transform>affine</transform>
+      <marginRatio>0.125</marginRatio>
+      <initialization>1</initialization>
+   </findTransform>
+</motionCorrectionSetting>

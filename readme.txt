@@ -1,0 +1,23 @@
+Motion correction scripts.
+	Akinori Mitani (2017)
+	amitani.tky@gmail.com
+
+If used for research, please properly mention the software in the methods.
+
+batch_motion_correct_dir processes all the tif files in a directory.
+
+batch_motion_correct_queued is similar but takes file lists as an arguments.
+
+motion_correct processes one file.
+
+motion_correct.xml can specify parameters for OpenCV based motion correction. The file here is used as default. Put one file to the same directory as processing files and 
+the parameters can be set specifically for those files (see load_mc_settings_from_xml.m)
+If there is no motion_correct.xml files (either here or at where the files are), mexBilinearRegistrator is used. This is gradient-based method which can converge to a local minimum. In some situatons this can potentially work better.
+
+By default, this uses the last channel for alignment (assuming red is structural if used) and save the first channel (assuming GCaMP in green ch)
+
+All the mex files are compiled for Windows 64 bit environment with VC++ runtime. Run vcredist_x64.exe to install it.
+To compile mex files, OpenCV with Matlab support is required.
+
+
+
