@@ -10,14 +10,18 @@ batch_motion_correct_queued is similar but takes file lists as an arguments.
 
 motion_correct processes one file.
 
-motion_correct.xml can specify parameters for OpenCV based motion correction. The file here is used as default. Put one file to the same directory as processing files and 
-the parameters can be set specifically for those files (see load_mc_settings_from_xml.m)
-If there is no motion_correct.xml files (either here or at where the files are), mexBilinearRegistrator is used. This is gradient-based method which can converge to a local minimum. In some situatons this can potentially work better.
+motion_correct.xml can specify parameters for OpenCV based motion correction. The file here is used as default. Put one file to the same directory as processing files and the parameters can be set specifically for those files (see load_mc_settings_from_xml.m)
+If there is no motion_correct.xml files (either here or at where the files are), mexBilinearRegistrator is used. This is gradient-based method which can converge to a local minimum. In some situatons this can potentially work better. @BilinearPyramidImageRegistrator uses the same algorithm to mexBilinearRegistrator written solely in Matlab.
 
 By default, this uses the last channel for alignment (assuming red is structural if used) and save the first channel (assuming GCaMP in green ch)
 
 All the mex files are compiled for Windows 64 bit environment with VC++ runtime. Run vcredist_x64.exe to install it.
 To compile mex files, OpenCV with Matlab support is required.
+Also, they anly take int16 inputs. If your data is not in this format, convert it or use Matlab version (@BilinearPyramidImageRegistrator).
+
+Source code for the mex files is shared in another repository called mex_motion_correct.
+
+
 
 
 
