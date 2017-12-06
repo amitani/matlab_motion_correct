@@ -101,7 +101,7 @@ function batch_motion_correct_queued(fn_list,target,save_path,align_ch,save_ch, 
                     disp(e);
                 end
             end
-            for i=1:length(fn_list_to_compute)
+            parfor i=1:length(fn_list_to_compute)
                 fn = fn_list_to_compute{i};
                 motion_correct(fn,target_fn,save_path,align_ch,save_ch, n_sum, n_sum_align,[],[],ffn_ROI);
             end
