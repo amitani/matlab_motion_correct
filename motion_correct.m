@@ -81,6 +81,9 @@ function done = motion_correct(fn,target,save_path,align_ch,save_ch,n_sum,n_sum_
         end
     end
     
+    t0 = [];
+    running_template = [];
+    
     if(isempty(params_mc))
         if(to_use_mex)
             target = int16(target);
@@ -111,11 +114,21 @@ function done = motion_correct(fn,target,save_path,align_ch,save_ch,n_sum,n_sum_
 %             'normalization_offset',params_mc.normalizationOffset);
 %         t=bsxfun(@minus,t,t_target);
 %         method = 'cv_avg';
-        
-        [t, heatmap] = cvMotionCorrect(image_stack_align, target,'factor',params_mc.factor,'marginh',params_mc.marginh, ...
-            'marginw',params_mc.marginw,'sigma_smoothing',params_mc.sigmaSmoothing,'sigma_normalization',params_mc.sigmaNormalization, ...
-            'normalization_offset',params_mc.normalizationOffset);
-        method = 'cv';
+        if(params_mc.margin_running>0)
+            [running_template, dt, ~, heatmap] = make_stable_average(image_stack_align,'factor',params_mc.factor,'marginh',params_mc.marginh, ...
+                'marginw',params_mc.marginw,'sigma_smoothing',params_mc.sigmaSmoothing,'sigma_normalization',params_mc.sigmaNormalization, ...
+                'normalization_offset',params_mc.normalizationOffset);
+            [t0] = cvMotionCorrect(running_template, target,'factor',params_mc.factor,'marginh',params_mc.margin_running, ...
+                'marginw',params_mc.margin_running,'sigma_smoothing',params_mc.sigmaSmoothing,'sigma_normalization',params_mc.sigmaNormalization, ...
+                'normalization_offset',params_mc.normalizationOffset);
+            t = bsxfun(@plus,t0,dt);
+            method = 'cv_rt';
+        else
+            [t, heatmap] = cvMotionCorrect(image_stack_align, target,'factor',params_mc.factor,'marginh',params_mc.marginh, ...
+                'marginw',params_mc.marginw,'sigma_smoothing',params_mc.sigmaSmoothing,'sigma_normalization',params_mc.sigmaNormalization, ...
+                'normalization_offset',params_mc.normalizationOffset);
+            method = 'cv';
+        end
     end
     
     L.newline('Done. Shifting signal ch.');
@@ -131,16 +144,21 @@ function done = motion_correct(fn,target,save_path,align_ch,save_ch,n_sum,n_sum_
     
     L.newline('Done. Saving corrected files.');
     
-    L.newline('Done. Saving correted movie.');
-    write_tiff(fn_corrected_tif,int16(corrected),info);
-%     if(~exist('ffn_ROI','var')||isempty(ffn_ROI)||~exist(ffn_ROI,'file'))
-%     end
-    
-    if(n_sum>0)
-        summed = cast(downsample_mean(corrected,n_sum,3),class(image_stack_save));
+    if(exist('ffn_ROI','var')&&~isempty(ffn_ROI)&&exist(ffn_ROI,'file'))
+        try
+            roi_ffn=ffn_ROI;
+            roi_mask_2d =  sparse(read_roi(roi_ffn,512,512,2,32));
+            data_2d = reshape(corrected,512*512,size(corrected,3));
+            roi_values = double(data_2d)'*roi_mask_2d;
+            save(fn_roi_mat,'roi_values','frame_tag','roi_mask_2d','roi_ffn');
+        catch
+            write_tiff(fn_corrected_tif,int16(corrected),info);
+        end
     else
-        summed = [];
+        write_tiff(fn_corrected_tif,int16(corrected),info);
     end
+    
+    
     
     if(n_sum_align>0)
         L.newline('Done. Shifting align ch.');
@@ -165,22 +183,19 @@ function done = motion_correct(fn,target,save_path,align_ch,save_ch,n_sum,n_sum_
     L.newline('Done. Saving data.');
     
     info_first = info(1);
-    
-    if(exist('ffn_ROI','var')&&~isempty(ffn_ROI)&&exist(ffn_ROI,'file'))
-        try
-            roi_ffn=ffn_ROI;
-            roi_mask_2d =  sparse(read_roi(roi_ffn,512,512,2,32));
-            data_2d = reshape(corrected,512*512,size(corrected,3));
-            roi_values = double(data_2d)'*roi_mask_2d;
-            save(fn_roi_mat,'roi_values','frame_tag','roi_mask_2d','roi_ffn');
-        catch
-        end
+    if(n_sum>0)
+        summed = cast(downsample_mean(corrected,n_sum,3),class(image_stack_save));
+    else
+        summed = [];
     end
+    
     save(fn_summary_mat, '-v6',   'summed',...
                                   'summed_align',...
                                   'frame_tag',...
                                   'info_first',...
                                   't',...
+                                  't0',...
+                                  'running_template',...
                                   'target',...
                                   'method', ...
                                   'params_mc',...

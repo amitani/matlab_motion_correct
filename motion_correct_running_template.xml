@@ -2,15 +2,15 @@
 <motionCorrectionSetting>
    <cvMotionCorrect>
       <factor>2</factor>
-      <marginh>64</marginh>
-      <marginw>32</marginw>
+      <marginh>32</marginh>
+      <marginw>20</marginw>
       <sigmaSmoothing>0</sigmaSmoothing>
       <sigmaNormalization>0</sigmaNormalization>
       <normalizationOffset>0</normalizationOffset>
       <toEqualizeHistogram>0</toEqualizeHistogram>
       <threshold>80</threshold>
       <replacement>35</replacement>
-	  <margin_running>0</margin_running>
+	  <margin_running>128</margin_running>
    </cvMotionCorrect>
    <findTransform>
       <r1>1</r1>
