@@ -25,3 +25,6 @@ Thumbs.db
 *.tif
 *.png
 
+*.mexw64
+*.exe
+*.dll

@@ -8,6 +8,10 @@ function [template, t, shifted, h] = make_stable_average(im,varargin)
         [t(i,:), h(:,:,i)]=cvMotionCorrect(im(:,:,i),template,varargin{:});
         shifted(:,:,i)=BilinearImageRegistrator.shift(im(:,:,i),t(i,:));
     end
+%     for i=I1
+%         [t(I1,:), h(:,:,I1)]=cvMotionCorrect(im(:,:,I1),template,varargin{:});
+%         shifted(:,:,I1)=BilinearImageRegistrator.shift(im(:,:,I1),t(I1,:));
+%     end
     template=nanmean(shifted(:,:,I1),3);
     for i=I2
         [t(i,:), h(:,:,i)]=cvMotionCorrect(im(:,:,i),template,varargin{:});
