@@ -2,7 +2,7 @@ Motion correction scripts.
 	Akinori Mitani (2017)
 	amitani.tky@gmail.com
 
-If used for research, please properly cite a paper this is used first.
+If used for research, please properly cite a paper this is used first and mention it in Methods.
 Brain-Computer Interface with Inhibitory Neurons Reveals Subtype-Specific Strategies
 Mitani, Akinori et al. Current Biology , Volume 28 , Issue 1 , 77 - 83.e4
 http://www.cell.com/current-biology/fulltext/S0960-9822(17)31517-8
