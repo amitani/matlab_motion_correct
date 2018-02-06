@@ -22,7 +22,7 @@ All the mex files are compiled for Windows 64 bit environment with VC++ runtime.
 To compile mex files, OpenCV with Matlab support is required.
 Also, they anly take int16 inputs. If your data is not in this format, convert it or use Matlab version (@BilinearPyramidImageRegistrator).
 
-Source code for the mex files is shared in another repository called mex_motion_correct.
+Source code for the mex files is shared in another repository (https://github.com/amitani/mex_tools).
 
 
 
